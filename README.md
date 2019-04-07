@@ -1,2 +1,3 @@
-# causal_inference_evaluation
-Causal Inference Evaluation Suite
+# Causal Inference Evaluation
+
+Exploration of Causal Inference Suite
