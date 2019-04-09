@@ -1,7 +1,8 @@
+from .Model import Model
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-class S_learner():
+class S_learner(Model):
 	def __init__(self):
 		self.reg = None
 
