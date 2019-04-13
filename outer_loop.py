@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import time
 import Models
 import pickle
@@ -8,7 +9,7 @@ from evaluation import Evaluator
 
 from argparse import ArgumentParser
 parser = ArgumentParser()
-parser.add_argument('--model', default='S_learner', type=str, help='model type (default: ResNet18)')
+parser.add_argument('--model', default='SLearner', type=str, help='model type (default: ResNet18)')
 parser.add_argument('--data', default='IHDP', type=str, help='dataset (default: IHDP')
 args = parser.parse_args()
 
@@ -22,7 +23,7 @@ scores_out = np.zeros((replications, n_stats))
 
 for repl in range(replications):
 	train_x = train['x'][:, :, repl]
-	train_t = train['t'][:, repl].reshape(-1, 1)
+	train_t = train['t'][:, repl]
 	train_y = train['yf'][:, repl]
 
 	start = time.time()
@@ -38,7 +39,6 @@ for repl in range(replications):
 	in_sample_time = end - start
 
 	## In-sample:
-
 	eval_in = Evaluator(
 		y = train_y, 
 		t = train_t.flatten(),
@@ -52,7 +52,7 @@ for repl in range(replications):
 
 	test = dict(np.load('Data/%s/test.npz' % args.data))
 	test_x = test['x'][:, :, repl]
-	test_t = test['t'][:, repl].reshape(-1, 1)
+	test_t = test['t'][:, repl]
 	test_y = test['yf'][:, repl]
 
 	## Out-of-sample:
@@ -65,7 +65,7 @@ for repl in range(replications):
 	## Out-of-sample:
 	eval_out = Evaluator(
 		y = test_y, 
-		t = test_t.flatten(),
+		t = test_t,
 		y_cf = test['ycf'][:, repl],
 		mu0 = test['mu0'][:, repl] if 'mu0' in test else None,
 		mu1 = test['mu1'][:, repl] if 'mu1' in test else None
@@ -85,10 +85,15 @@ print ('Out of sample')
 print (means_out)
 print (stds_out)
 
-results = pickle.load(open('results.p', 'rb'))
-results[(args.model, args.data, 'in')] = (means_in, stds_in)
-results[(args.model, args.data, 'out')] = (means_out, stds_out)
-pickle.dump(results, open('results.p', 'wb'))
+idxs = ['IN_MEAN', 'IN_STD', 'OUT_MEAN', 'OUT_STD']
+cols = ['RMSE_ITE', 'ABS_ATE', 'PEHE', 'TRAIN_TIME', 'PREDICT_TIME']
+df = pd.DataFrame(np.vstack([means_in, stds_in, means_out, stds_out]), index=idxs, columns=cols)
+df.to_csv('Results/' + args.model + '_' + args.data + '.csv')
+# results = pickle.load(open('results.p', 'rb'))
+# results[(args.model, args.data, 'in')] = (means_in, stds_in)
+# results[(args.model, args.data, 'out')] = (means_out, stds_out)
+# print(results)
+# pickle.dump(results, open('results.p', 'wb'))
 
 
 

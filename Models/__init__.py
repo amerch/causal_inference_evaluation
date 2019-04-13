@@ -1,2 +1,3 @@
 from .Model	 import Model
-from .S_learner import S_learner
+from .SLearner import SLearner
+from .TLearner import TLearner
