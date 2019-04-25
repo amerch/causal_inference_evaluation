@@ -9,14 +9,17 @@
 
 # In[1]:
 
+
 import numpy as np
 import pandas as pd
 from scipy.special import expit
 from sklearn.model_selection import train_test_split
 import os
+import json
 
 
 # In[2]:
+
 
 df = pd.read_csv('../Raw_Data/TWINS/twin_pairs_X_3years_samesex.csv')
 ys = pd.read_csv('../Raw_Data/TWINS/twin_pairs_Y_3years_samesex.csv')
@@ -25,44 +28,71 @@ ys = ys.drop(['Unnamed: 0'], axis=1)
 
 # In[3]:
 
-to_include = [
-    'feduc6',
-    'meduc6',
-    'dmar',
-    'mrace',
-    'frace',
-    'brstate_reg',
-    'dtotord_min',
-    'diabetes',
-    'renal',
-    'alcohol',
-    'tobacco',
-    'adequacy',
-    'gestat10',
-    'pldel'
-]
 
-df = df[to_include]
+desc = open('../Raw_Data/TWINS/covar_desc.txt', 'r').read()
+desc = eval(desc)
+
+types = open('../Raw_Data/TWINS/covar_type.txt', 'r').read()
+types = eval(types)
+
+types['gestat10'] = 'ord'
 
 
 # In[4]:
 
-missing = df.isna().mean(axis=0) > 0.2
+
+df.nunique()
 
 
 # In[5]:
+
+
+df['bord'] = (df['bord_0'] < df['bord_1']).astype(int)
+to_remove = ['Unnamed: 0', 'Unnamed: 0.1', 'infant_id_0', 'infant_id_1',
+             'brstate', 'stoccfipb', 'mplbir', 'bord_0', 'bord_1']
+df = df.drop(to_remove, axis=1)
+
+for var in to_remove + ['gestat10']:
+    if var in types:
+        types.pop(var)
+
+
+# In[6]:
+
+
+group_vars = {}
+for key, value in types.items():
+    group_vars[value] = group_vars.get(value, []) + [key]
+
+
+# In[7]:
+
+
+group_vars['cat']
+
+
+# In[8]:
+
+
+missing = df.isna().mean(axis=0) > 0.2
+
+
+# In[9]:
+
 
 max_values = (df.max(axis=0) + 1)[missing]
 print (max_values.shape)
 
 
-# In[6]:
+# In[10]:
+
 
 mode_values = df.mode(axis=0).iloc[0][np.logical_not(missing)]
 print (mode_values.shape)
 
 
-# In[7]:
+# In[11]:
+
 
 new_category = missing.index[missing]
 mode_category = missing.index[np.logical_not(missing)]
@@ -74,38 +104,32 @@ print ("These columns are imputed using mode")
 print (mode_category)
 
 
-# In[8]:
+# In[12]:
+
 
 df[new_category] = df[new_category].fillna(max_values, axis=0)
 df[mode_category] = df[mode_category].fillna(mode_values, axis=0)
 
 
-# In[9]:
+# In[13]:
 
-cat = [
-    'feduc6',
-    'meduc6',
-    'mrace',
-    'frace',
-    'brstate_reg',
-    'adequacy',
-    'pldel'
-]
 
-df = pd.get_dummies(df, columns=cat)
+df = pd.get_dummies(df, columns=group_vars['cat'])
 print (df.shape)
 print ("This is not the same as CEVAE but the closest we could get to the author's description")
 
 
-# In[10]:
+# In[14]:
+
 
 z = df['gestat10'].values.reshape(-1,1)
 x = df.drop(['gestat10'], axis=1).values
 
 
-# In[11]:
+# In[15]:
 
-n = 1 
+
+n = 5 
     
 w0 = 0.1  * np.random.randn(x.shape[1], n) 
 wh = 5 + 0.1 * np.random.randn(1, n)
@@ -115,7 +139,8 @@ t = np.random.binomial(1, probs)
 ys = ys.values
 
 
-# In[12]:
+# In[16]:
+
 
 noises = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
 for noise in noises:
@@ -126,7 +151,7 @@ for noise in noises:
     flip = (np.random.uniform(size=prox.shape) > (1-noise))
     proxies = np.logical_xor(prox, flip).astype(int)
 
-    x_repeat = np.repeat(x[:, :, np.newaxis], n, 2)
+    x_repeat = np.repeat(x[:, :, np.newaxis], 5, 2)
     features = np.concatenate([x_repeat, proxies], axis=1)
     
     path = '../Data/Twins_%d' % (100 * noise)
@@ -156,6 +181,8 @@ for noise in noises:
 
         x_train[:,:,i], x_test[:, :, i], t_train[:,i], t_test[:,i], yf_train[:,i], yf_test[:,i],            ycf_train[:,i], ycf_test[:,i] = train_test_split(temp_x, temp_t, temp_yf, temp_ycf)
 
-    np.savez(path + '/train.npz', x=x_train, t=t_train, yf=yf_train, ycf=ycf_train)
-    np.savez(path + '/test.npz', x=x_test,t=t_train, yf=yf_test, ycf=ycf_train)
+    mu0, mu1 = ys.mean(axis=0)
+
+    np.savez(path + '/train.npz', x=x_train, t=t_train, yf=yf_train, ycf=ycf_train, mu1=mu1 * np.ones_like(t_train), mu0=mu0 * np.ones_like(t_train))
+    np.savez(path + '/test.npz', x=x_test, t=t_test, yf=yf_test, ycf=ycf_test, mu1=mu1 * np.ones_like(t_test), mu0=mu0 * np.ones_like(t_test))
 

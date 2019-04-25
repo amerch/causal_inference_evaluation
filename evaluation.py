@@ -1,4 +1,4 @@
-## FROM CEVAE code with minor changes
+ ## FROM CEVAE code with minor changes
 
 import numpy as np
 
@@ -9,6 +9,8 @@ class Evaluator(object):
         self.y_cf = y_cf
         self.mu0 = mu0
         self.mu1 = mu1
+        self.true_ite = None
+
         if mu0 is not None and mu1 is not None:
             self.true_ite = mu1 - mu0
 

@@ -33,7 +33,7 @@
  'mager8': 'mom age',
  'meduc6': 'mom education',
  'mplbir': 'mom place of birth',
- 'mplbir_reg': US census region of mplbir',
+ 'mplbir_reg': 'US census region of mplbir',
  'mpre5': 'trimester prenatal care begun, 4 is none',
  'mrace': 'mom race',
  'nprevistq': 'quintile number of prenatal visits',
