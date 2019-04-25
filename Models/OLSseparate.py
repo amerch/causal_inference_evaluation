@@ -2,7 +2,7 @@ from .Model import Model
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-class OLS_separate(Model):
+class OLSseparate(Model):
 	def __init__(self):
 		self.reg = None
 
