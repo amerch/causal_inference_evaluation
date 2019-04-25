@@ -1,0 +1,16 @@
+{
+'feduc6': 'education category',
+'meduc6': 'mom education',
+'dmar': 'married',
+'mrace': 'mom race',
+'frace': 'dad race',
+'brstate_reg': 'US census region of brstate',
+'dtotord_min': 'total number of births before twins',
+'diabetes': 'risk factor, Diabetes',
+'renal': 'risk factor, Renal disease',
+'alcohol': 'risk factor, alcohol use',
+'tobacco': 'risk factor, tobacco use',
+ 'adequacy': 'adequacy of care',
+ 'pldel': 'place of delivery',
+  'gestat10': 'gestation 10 categories',
+}
