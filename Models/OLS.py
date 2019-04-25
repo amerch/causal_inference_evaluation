@@ -7,13 +7,16 @@ class OLS(Model):
 		self.reg = None
 
 	def fit(self, x, t, y):
+		t = t.reshape(-1, 1)
 		x_cat = np.concatenate([x, t], axis=1)
 		reg = LinearRegression().fit(x_cat, y)
 		self.reg = reg
 
 	def predict(self, x, t):
 		if self.reg is None:
-			raise Exception('S_learner not Initialized')
+			raise Exception('OLS not Initialized')
+			
+		t = t.reshape(-1, 1)
 
 		x_cat = np.concatenate([x, t], axis=1)
 		return self.reg.predict(x_cat)
