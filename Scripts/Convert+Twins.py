@@ -105,7 +105,7 @@ x = df.drop(['gestat10'], axis=1).values
 
 # In[11]:
 
-n = 5 
+n = 1 
     
 w0 = 0.1  * np.random.randn(x.shape[1], n) 
 wh = 5 + 0.1 * np.random.randn(1, n)
@@ -126,7 +126,7 @@ for noise in noises:
     flip = (np.random.uniform(size=prox.shape) > (1-noise))
     proxies = np.logical_xor(prox, flip).astype(int)
 
-    x_repeat = np.repeat(x[:, :, np.newaxis], 5, 2)
+    x_repeat = np.repeat(x[:, :, np.newaxis], n, 2)
     features = np.concatenate([x_repeat, proxies], axis=1)
     
     path = '../Data/Twins_%d' % (100 * noise)
