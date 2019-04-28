@@ -42,7 +42,7 @@ for repl in range(replications):
 	eval_in = Evaluator(
 		y = train_y, 
 		t = train_t.flatten(),
-		y_cf = train['ycf'][:, repl],
+		y_cf = train['ycf'][:, repl] if 'ycf' in train else None,
 		mu0 = train['mu0'][:, repl] if 'mu0' in train else None,
 		mu1 = train['mu1'][:, repl] if 'mu1' in train else None,
 		cate = train['cate'][:, repl] if 'cate' in train else None
@@ -67,10 +67,10 @@ for repl in range(replications):
 	eval_out = Evaluator(
 		y = test_y, 
 		t = test_t,
-		y_cf = test['ycf'][:, repl],
+		y_cf = test['ycf'][:, repl] if 'ycf' in test else None,
 		mu0 = test['mu0'][:, repl] if 'mu0' in test else None,
 		mu1 = test['mu1'][:, repl] if 'mu1' in test else None,
-		cate = test['cate'][:, repl] if 'cate' in train else None
+		cate = test['cate'][:, repl] if 'cate' in test else None
 	)
 
 	out_of_sample_scores = eval_out.calc_stats(test_preds1, test_preds0)
