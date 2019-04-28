@@ -44,7 +44,8 @@ for repl in range(replications):
 		t = train_t.flatten(),
 		y_cf = train['ycf'][:, repl],
 		mu0 = train['mu0'][:, repl] if 'mu0' in train else None,
-		mu1 = train['mu1'][:, repl] if 'mu1' in train else None
+		mu1 = train['mu1'][:, repl] if 'mu1' in train else None,
+		cate = train['cate'][:, repl] if 'cate' in train else None
 	)
 
 	in_sample_scores = eval_in.calc_stats(train_preds1, train_preds0)
@@ -68,7 +69,8 @@ for repl in range(replications):
 		t = test_t,
 		y_cf = test['ycf'][:, repl],
 		mu0 = test['mu0'][:, repl] if 'mu0' in test else None,
-		mu1 = test['mu1'][:, repl] if 'mu1' in test else None
+		mu1 = test['mu1'][:, repl] if 'mu1' in test else None,
+		cate = test['cate'][:, repl] if 'cate' in train else None
 	)
 
 	out_of_sample_scores = eval_out.calc_stats(test_preds1, test_preds0)
