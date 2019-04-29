@@ -3,10 +3,11 @@ import numpy as np
 from sklearn.linear_model import Lasso
 
 class TLearner(Model):
-	def __init__(self):
+	def __init__(self, *args, **kwargs):
 		self.reg_treated = None
 		self.reg_untreated = None
 		self.l1_penalty = 0
+		super(TLearner, self).__init__(*args, **kwargs)
 
 	def fit(self, x, t, y, nfolds=5, lambdas=[1e3, 1e2, 1e1, 1e0, 1e-1, 1e-2, 1e-3], seed=1234):
 		splits = super().get_splits(x, nfolds, seed)

@@ -9,7 +9,7 @@ from evaluation import Evaluator
 
 from argparse import ArgumentParser
 parser = ArgumentParser()
-parser.add_argument('--model', default='SLearner', type=str, help='model type (default: ResNet18)')
+parser.add_argument('--model', default='SLearner', type=str, help='model type (default: SLearner)')
 parser.add_argument('--data', default='IHDP', type=str, help='dataset (default: IHDP')
 args = parser.parse_args()
 

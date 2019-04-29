@@ -3,8 +3,9 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 
 class OLS(Model):
-	def __init__(self):
+	def __init__(self, *args, **kwargs):
 		self.reg = None
+		super(OLS, self).__init__(*args, **kwargs)
 
 	def fit(self, x, t, y):
 		t = t.reshape(-1, 1)
