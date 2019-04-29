@@ -5,3 +5,4 @@ from .SLearner import SLearner
 from .TLearner import TLearner
 from .Naive import Naive
 from .KNN import KNN
+from .RLearner import RLearner
