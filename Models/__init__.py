@@ -7,3 +7,4 @@ from .Naive import Naive
 from .RandomForest import RandomForest
 from .OrthoForest import OrthoForest
 from .KNN import KNN
+from .DML import DML
