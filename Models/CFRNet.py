@@ -3,6 +3,25 @@
 from .Model import Model
 import numpy as np
 
+class CFRNet(Model):
+    def __init__(self):
+        self.reg = None
+
+    def fit(self, x, t, y, nfolds=5, seed=282):
+        # splits = super().get_splits(x, nfolds, seed)
+        # self.reg = cfr_net(x, t, y, )
+        pass
+
+    def predict(self, x, t):
+        if self.reg is None:
+            raise Exception('RandomForest not Initialized')
+
+        return self.reg.predict(self.get_predictors(x, t))
+
+    def get_predictors(self, x, t):
+        return np.hstack([x, (t - 0.5).reshape(-1, 1) * x])
+
+
 class cfr_net(object):
     """
     cfr_net implements the counterfactual regression neural network
@@ -273,26 +292,3 @@ class cfr_net(object):
             y, weights_out, weights_pred = self._build_output(h_input, dim_in+1, dim_out, do_out, FLAGS)
 
         return y, weights_out, weights_pred
-
-class CFRNet(Model):
-    def __init__(self):
-        self.reg = None
-
-    def fit(self, x, t, y, nfolds=5, seed=282):
-        # splits = super().get_splits(x, nfolds, seed)
-        self.reg = RandomForestRegressor(max_depth=2,
-                        n_estimators=100,
-                        random_state=282,)\
-                    .fit(self.get_predictors(x, t), y)
-
-    def predict(self, x, t):
-        if self.reg is None:
-            raise Exception('RandomForest not Initialized')
-
-        return self.reg.predict(self.get_predictors(x, t))
-
-    def get_predictors(self, x, t):
-        return np.hstack([x, (t - 0.5).reshape(-1, 1) * x])
-
-
-    
