@@ -3,7 +3,7 @@
 import numpy as np
 
 class Evaluator(object):
-    def __init__(self, y, t, y_cf=None, mu0=None, mu1=None):
+    def __init__(self, y, t, y_cf=None, mu0=None, mu1=None, cate=None):
         self.y = y
         self.t = t
         self.y_cf = y_cf
@@ -13,10 +13,12 @@ class Evaluator(object):
 
         if mu0 is not None and mu1 is not None:
             self.true_ite = mu1 - mu0
+        elif cate is not None:
+            self.true_ite = cate
 
     def rmse_ite(self, ypred1, ypred0):
         pred_ite = np.zeros_like(self.true_ite)
-        idx1, idx0 = np.where(self.t == 1), np.where(self.t == 0)
+        idx1, idx0 = np.where(self.t == 1)[0], np.where(self.t == 0)[0]
         ite1, ite0 = self.y[idx1] - ypred0[idx1], ypred1[idx0] - self.y[idx0]
         pred_ite[idx1] = ite1
         pred_ite[idx0] = ite0
@@ -26,7 +28,10 @@ class Evaluator(object):
         return np.abs(np.mean(ypred1 - ypred0) - np.mean(self.true_ite))
 
     def pehe(self, ypred1, ypred0):
-        return np.sqrt(np.mean(np.square((self.mu1 - self.mu0) - (ypred1 - ypred0))))
+        if self.mu1 is not None and self.mu0 is not None:
+            return np.sqrt(np.mean(np.square((self.mu1 - self.mu0) - (ypred1 - ypred0))))
+        elif self.true_ite is not None:
+            return np.sqrt(np.mean(np.square(self.true_ite - (ypred1 - ypred0))))
 
     def y_errors(self, y0, y1):
         ypred = (1 - self.t) * y0 + self.t * y1
