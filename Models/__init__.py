@@ -6,3 +6,6 @@ from .TLearner import TLearner
 from .Naive import Naive
 from .KNN import KNN
 from .RLearner import RLearner
+from .RandomForest import RandomForest
+from .OrthoForest import OrthoForest
+from .KNN import KNN

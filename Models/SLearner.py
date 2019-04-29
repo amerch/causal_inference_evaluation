@@ -7,7 +7,7 @@ class SLearner(Model):
 		self.reg = None
 		self.l1_penalty = 0
 
-	def fit(self, x, t, y, nfolds=5, lambdas=[1e3, 1e2, 1e1, 1e0, 1e-1, 1e-2, 1e-3], seed=1234):
+	def fit(self, x, t, y, nfolds=5, lambdas=[1e3, 1e2, 1e1, 1e0, 1e-1, 1e-2, 1e-3], seed=282):
 		splits = super().get_splits(x, nfolds, seed)
 		avg_rmses = []
 		for l in lambdas:
