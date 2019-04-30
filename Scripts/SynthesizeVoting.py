@@ -17,7 +17,7 @@ train = {
   'yf': [],
   'ycf': [],
   't': [],
-  'cate': []
+  'ite': []
 }
 
 test = {
@@ -25,7 +25,7 @@ test = {
   'yf': [],
   'ycf': [],
   't': [],
-  'cate': []
+  'ite': []
 }
 
 holdout = {
@@ -33,7 +33,7 @@ holdout = {
   'yf': [],
   'ycf': [],
   't': [],
-  'cate': []
+  'ite': []
 }
 
 for i in range(8):
@@ -46,7 +46,7 @@ for i in range(8):
   y_original = df['Y']
   t = df['W'] # Treatment
   tau = -X['vote00'] * 0.5 / (1 + 50 / X['age']) # CATE
-  flip = np.random.binomial(n=1, p=np.abs(t))
+  flip = np.random.binomial(n=1, p=np.abs(tau))
 
   y_outcomes = np.empty((n_total, 2))
   flip_mask = (flip == 1)
@@ -90,19 +90,19 @@ for i in range(8):
   train['t'].append(t_train.copy())
   train['yf'].append(y_train.copy())
   train['ycf'].append(ycf_train.copy())
-  train['cate'].append(tau_train.copy())
+  train['ite'].append(tau_train.copy())
 
   test['x'].append(X_test.copy())
   test['t'].append(t_test.copy())
   test['yf'].append(y_test.copy())
   test['ycf'].append(ycf_test.copy())
-  test['cate'].append(tau_test.copy())
+  test['ite'].append(tau_test.copy())
 
   holdout['x'].append(X_holdout.copy())
   holdout['t'].append(t_holdout.copy())
   holdout['yf'].append(y_holdout.copy())
   holdout['ycf'].append(ycf_holdout.copy())
-  holdout['cate'].append(tau_holdout.copy())
+  holdout['ite'].append(tau_holdout.copy())
 
   # Shuffle dataset for next train-test-holdout split; first replication is always original dataset
   np.random.shuffle(indices)
