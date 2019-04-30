@@ -51,7 +51,7 @@ for repl in range(replications):
 		mu0 = train['mu0'][:, repl] if 'mu0' in train else None,
 		mu1 = train['mu1'][:, repl] if 'mu1' in train else None,
 		true_ite = train['ite'][:, repl] if 'ite' in train else None,
-		true_ate = train['ate'][0, 0] if 'ate' in train else None
+		true_ate = train['ate'].item() if 'ate' in train else None
 	)
 
 	stats_names, in_sample_scores = eval_in.calc_stats(train_preds1, train_preds0)
@@ -79,7 +79,7 @@ for repl in range(replications):
 		mu0 = test['mu0'][:, repl] if 'mu0' in test else None,
 		mu1 = test['mu1'][:, repl] if 'mu1' in test else None,
 		true_ite = test['ite'][:, repl] if 'ite' in test else None,
-		true_ate = test['ate'][0, 0] if 'ate' in test else None
+		true_ate = test['ate'].item() if 'ate' in test else None
 	)
 
 	stats_names, out_of_sample_scores = eval_out.calc_stats(test_preds1, test_preds0)
