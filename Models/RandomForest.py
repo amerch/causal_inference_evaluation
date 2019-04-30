@@ -31,9 +31,14 @@ class RandomForest(Model):
 		#### CLASSIFICATION ####
 		if self.binary:
 			return self.reg.predict_proba(self.get_predictors(x, t))[:, 1]
+
 		#### REGRESSION ####
 		else:    
-			return self.reg.predict(self.get_predictors(x, t))
+			# print("x", x.shape, x)
+			# print("t", t.shape, t)
+			effect = self.reg.predict(self.get_predictors(x, t))
+			# print("effect", effect.shape, effect)
+			return effect
 
 	def get_predictors(self, x, t):
 		return np.hstack([x, (t - 0.5).reshape(-1, 1) * x])
