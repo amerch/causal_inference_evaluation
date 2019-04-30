@@ -23,6 +23,9 @@ else:
 model = Models.__dict__[args.model](binary=binary)
 
 replications = train['x'].shape[2]
+if args.model == 'OrthoForest':
+    print('OrthoForest in use')
+    replications = 1
 scores_in = []
 scores_out = []
 
