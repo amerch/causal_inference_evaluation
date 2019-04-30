@@ -1,7 +1,8 @@
 from sklearn.model_selection import KFold
 
 class Model(object):
-  def __init__(self):
+  def __init__(self, binary=False):
+    self.binary = binary
     pass
 
   def fit(self, x, t, y):

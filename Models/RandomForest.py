@@ -8,7 +8,7 @@ class RandomForest(Model):
 
     def fit(self, x, t, y, nfolds=5, seed=282):
         # splits = super().get_splits(x, nfolds, seed)
-        self.reg = RandomForestRegressor(max_depth=2,
+        self.reg = RandomForestRegressor(max_depth=3,
                         n_estimators=100,
                         random_state=282,)\
                     .fit(self.get_predictors(x, t), y)

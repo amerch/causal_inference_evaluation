@@ -2,9 +2,10 @@ from .Model import Model
 import numpy as np
 
 class Naive(Model):
-	def __init__(self):
+	def __init__(self, *args, **kwargs):
 		self.y1 = None
 		self.y0 = None
+		super(Naive, self).__init__(*args, **kwargs)
 
 	def fit(self, x, t, y):
 		self.y0 = y[t==0].mean()
