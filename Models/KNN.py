@@ -3,8 +3,9 @@ import numpy as np
 from sklearn.neighbors import KNeighborsRegressor
 
 class KNN(Model):
-	def __init__(self):
+	def __init__(self, *args, **kwargs):
 		self.reg = None
+		super(KNN, self).__init__(*args, **kwargs)
 
 	def fit(self, x, t, y):
 		x_control, y_control = x[t == 0], y[t == 0]
