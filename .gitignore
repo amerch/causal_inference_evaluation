@@ -1,1 +1,4 @@
 *.pyc
+ignore.py
+ignore.ipynb
+ignore-checkpoint.ipynb
