@@ -2,3 +2,4 @@
 ignore.py
 ignore.ipynb
 ignore-checkpoint.ipynb
+.DS_Store
