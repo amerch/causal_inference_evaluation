@@ -2,7 +2,7 @@
 
 Implementation (pre-alpha) of the Universal Causal Evaluation Engine API from Lin ® Merchant ® Sarkar<sup>1</sup>.
 
-New models and datasets can be submitted via pull request to the Models and Data folders.
+New models and datasets can be submitted via pull request to the Models and Data folders. Models must have ```.fit(X, Y, T)``` and ```.predict(X, T)``` methods implemented.
 
 To evaluate error metrics for a particular model and dataset, run 
 
